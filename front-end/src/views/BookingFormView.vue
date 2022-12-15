@@ -46,7 +46,7 @@
                     <div style="border: none;">
                         <label for="">
                             Unggah Foto KTP
-                            <input type="file" required="true" style="border: none;" @change="onFileChange">
+                            <input type="file" required="true" id="file" style="border: none;" @change="onFileChange">
                         </label>
                     </div>
                     <div v-if="!isFilledOut" style="font-weight: 10px; color: red;">Make sure to fill out all required data</div>
@@ -141,19 +141,25 @@ export default{
         onFileChange(e) {
             this.form.foto_ktp = e.target.files[0];
         },
-        createImage(file) {
-            var image = new Image();
-            var reader = new FileReader();
-            var vm = this;
-
-            reader.onload = (e) => {
-                vm.form.foto_ktp = e.target.result;
-            };
-            reader.readAsDataURL(file);
-        },
         async sendForm(){
             try {
                 if(this.formValidation()){
+                    // attempt 1
+                    var formData = new FormData();
+                    var imagefile = document.querySelector('#file')
+                    formData.append("file", imagefile.files[0])
+                    console.log(formData)
+                    await axios.post('http://localhost:1337/uploadFile', formData, {
+                        headers: {
+                        'Content-Type': 'multipart/form-data'
+                        }
+                    }).then(res =>{
+                        console.log(res.data)
+                    }).catch(err => {
+                        console.log(err)
+                    })
+
+                    // sending identity form
                     await axios.post('http://localhost:1337/createBooking',{
                         namaPenghuni: this.form.nama_penghuni,
                         noTelp: this.form.no_telp,

@@ -8,7 +8,7 @@
             <div style="font-size: 30px; font-weight: 700; margin: 10px 0px;">Rp {{ order.totalHarga }}</div>
             <div class="metode_pembayaran">{{ order.metodePembayaran }}</div>
             <div style="text-align: left; margin-top: 10px;">
-                <label for="" style="font-size: 12px; font-weight: 700;">Upload your payment file<input type="file" name="" id=""></label>
+                <label for="" style="font-size: 12px; font-weight: 700;">Upload your payment file<input type="file" name="file" id="file" required="true" ></label>
             </div>
             <div style="margin-top: 20px; display: flex;">
                 <div><button class="green" @click="confirmCancel('confirm')">CONFIRM PAYMENT</button></div>
@@ -64,10 +64,27 @@ export default{
             }
             return new_price.join('')
         },
-        confirmCancel(action){
+        async confirmCancel(action){
             var stat = 'Canceled'
             console.log(this.$route.params.orderId)
-            if(action == 'confirm') stat = 'waiting_verification'
+            if(action == 'confirm'){
+                stat = 'waiting_verification'
+                // file upload
+                var formData = new FormData();
+                var imagefile = document.querySelector('#file')
+                formData.append("file", imagefile.files[0])
+                console.log(formData)
+                await axios.post('http://localhost:1337/uploadBuktiBayar', formData, {
+                    headers: {
+                    'Content-Type': 'multipart/form-data'
+                    }
+                    }).then(res =>{
+                        console.log(res.data)
+                    }).catch(err => {
+                        console.log(err)
+                    })
+            }
+
             axios.patch("http://localhost:1337/updateBookingStatus", {
                 id: this.$route.params.orderId,
                 status: stat

@@ -18,5 +18,7 @@ module.exports.routes = {
     'GET /getAllBooking' : 'BookingController.getAllBooking',
     'GET /getCertainBooking' : 'BookingController.getCertainBooking',
     'PATCH /updateBookingStatus' : 'BookingController.updateBookingStatus',
-    'DELETE /deleteBooking' : 'BookingController.deleteBooking'
+    'DELETE /deleteBooking' : 'BookingController.deleteBooking',
+    'POST /uploadFile' : 'BookingController.uploadFile',
+    'POST /uploadBuktiBayar' : 'BookingController.uploadBuktiBayar',
 };

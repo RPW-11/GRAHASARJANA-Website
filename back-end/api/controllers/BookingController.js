@@ -101,7 +101,26 @@
       }
     },
 
-  
+    uploadFile: async function(req, res){
+      req.file('file').upload({
+        dirname: '../../ktp',
+        maxByte: 100000
+      }, function(err, file){
+        if(err) console.log(err)
+        res.json({status: 'File uploaded successfully', 'file':file})
+      })
+    },
+
+    uploadBuktiBayar: async function(req, res){
+      req.file('file').upload({
+        dirname: '../../buktiBayar',
+        maxByte: 100000
+      }, function(err, file){
+        if(err) console.log(err)
+        res.json({status: 'File uploaded successfully', 'file':file})
+      })
+    },
+    
   };
   
   
